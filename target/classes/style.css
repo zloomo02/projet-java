@@ -1,0 +1,91 @@
+.screen-root {
+    -fx-background-color: linear-gradient(to bottom right, #f4f1ea, #d9e4ec);
+    -fx-font-family: "Noto Sans";
+}
+
+.title {
+    -fx-font-size: 28px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1d3557;
+}
+
+.subtitle {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #457b9d;
+}
+
+.question-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #1d3557;
+}
+
+.primary-btn {
+    -fx-background-color: #1d3557;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 18;
+}
+
+.secondary-btn {
+    -fx-background-color: #457b9d;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 18;
+}
+
+.accent-btn {
+    -fx-background-color: #2a9d8f;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 18;
+}
+
+.answer-btn {
+    -fx-background-color: #e9ecef;
+    -fx-text-fill: #1d3557;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+}
+
+.answer-btn:hover {
+    -fx-background-color: #d9dde2;
+}
+
+.selected-answer {
+    -fx-border-color: #1d3557;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.answer-correct {
+    -fx-background-color: #2a9d8f;
+    -fx-text-fill: white;
+}
+
+.answer-wrong {
+    -fx-background-color: #e63946;
+    -fx-text-fill: white;
+}
+
+.status-label {
+    -fx-text-fill: #1d3557;
+    -fx-font-size: 14px;
+}
+
+.error-label {
+    -fx-text-fill: #c0392b;
+    -fx-font-size: 13px;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #d9dde2;
+    -fx-background-radius: 8;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: linear-gradient(to right, #2a9d8f, #457b9d);
+    -fx-background-radius: 8;
+}
