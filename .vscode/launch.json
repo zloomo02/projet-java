@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Server: ServerMain",
+      "request": "launch",
+      "mainClass": "server.ServerMain",
+      "projectName": "quiz-server",
+      "cwd": "${workspaceFolder}/server"
+    },
+    {
+      "type": "java",
+      "name": "Client UI: QuizApplication",
+      "request": "launch",
+      "mainClass": "ui.QuizApplication",
+      "projectName": "quiz-client",
+      "cwd": "${workspaceFolder}/client"
+    },
+    {
+      "type": "java",
+      "name": "Client Console: ClientMain",
+      "request": "launch",
+      "mainClass": "client.ClientMain",
+      "projectName": "quiz-client",
+      "cwd": "${workspaceFolder}/client"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Run Server + Console Client",
+      "configurations": [
+        "Server: ServerMain",
+        "Client Console: ClientMain"
+      ]
+    }
+  ]
+}

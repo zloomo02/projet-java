@@ -2,6 +2,10 @@
 
 Ce document couvre les tests minimums pour valider l'integration Socket + DB + JavaFX.
 
+Le projet est maintenant separe en deux modules independants:
+- `server/`
+- `client/`
+
 ## Prerequis
 
 - JDK 21 installe (`java -version`)
@@ -10,13 +14,13 @@ Ce document couvre les tests minimums pour valider l'integration Socket + DB + J
 ## 1) Compilation du projet
 
 ```bash
-mvn -DskipTests compile
+mvn -pl server,client -am -DskipTests compile
 ```
 
 ## 1.b) Tests unitaires rapides
 
 ```bash
-mvn test
+mvn -pl server,client test
 ```
 
 Attendu:
@@ -28,6 +32,7 @@ Attendu:
 Dans un premier terminal:
 
 ```bash
+cd server
 mvn -DskipTests exec:java -Dexec.mainClass=server.ServerMain
 ```
 
@@ -40,6 +45,7 @@ Attendu:
 Dans deux terminaux differents:
 
 ```bash
+cd client
 mvn -DskipTests exec:java -Dexec.mainClass=client.ClientMain
 ```
 
@@ -64,6 +70,7 @@ Verifier:
 Dans un terminal:
 
 ```bash
+cd client
 mvn -DskipTests javafx:run
 ```
 
@@ -91,5 +98,5 @@ Apres au moins une partie terminee, verifier en base:
 Exemple commande SQLite:
 
 ```bash
-sqlite3 resources/quiz.db "SELECT username,total_games,total_wins,best_score FROM players ORDER BY best_score DESC;"
+sqlite3 server/resources/quiz.db "SELECT username,total_games,total_wins,best_score FROM players ORDER BY best_score DESC;"
 ```

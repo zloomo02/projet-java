@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Maven: Build all modules",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "-pl",
+        "server,client",
+        "-am",
+        "-DskipTests",
+        "compile"
+      ],
+      "group": "build",
+      "problemMatcher": [
+        "$javac"
+      ]
+    },
+    {
+      "label": "Maven: Run server",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "-f",
+        "server/pom.xml",
+        "-DskipTests",
+        "exec:java",
+        "-Dexec.mainClass=server.ServerMain"
+      ],
+      "isBackground": true
+    },
+    {
+      "label": "Maven: Run client console",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "-f",
+        "client/pom.xml",
+        "-DskipTests",
+        "exec:java",
+        "-Dexec.mainClass=client.ClientMain"
+      ],
+      "isBackground": true
+    },
+    {
+      "label": "Maven: Run client UI",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "-f",
+        "client/pom.xml",
+        "-DskipTests",
+        "javafx:run"
+      ],
+      "isBackground": true
+    }
+  ]
+}
