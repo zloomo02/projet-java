@@ -22,19 +22,32 @@ public class LobbyPanel extends BasePanel {
         this.appState = appState;
         setLayout(new BorderLayout(8,8));
 
-        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
+        top.setOpaque(false);
         JButton createBtn = new JButton("Create Room");
         JButton joinBtn = new JButton("Join Room");
         JButton readyBtn = new JButton("Ready");
         JButton logoutBtn = new JButton("Logout");
+        Theme.stylePrimaryButton(createBtn);
+        Theme.styleSecondaryButton(joinBtn);
+        Theme.styleSecondaryButton(readyBtn);
+        Theme.styleSecondaryButton(logoutBtn);
         top.add(createBtn);
         top.add(joinBtn);
         top.add(readyBtn);
         top.add(logoutBtn);
 
-        add(top, BorderLayout.NORTH);
-        add(new JScrollPane(roomsList), BorderLayout.CENTER);
-        add(statusLabel, BorderLayout.SOUTH);
+        JPanel card = new JPanel(new BorderLayout(8,8));
+        Theme.stylePanel(card);
+        card.add(top, BorderLayout.NORTH);
+        JScrollPane listPane = new JScrollPane(roomsList);
+        Theme.styleList(roomsList);
+        Theme.styleScrollPane(listPane);
+        card.add(listPane, BorderLayout.CENTER);
+        Theme.styleStatusLabel(statusLabel);
+        card.add(statusLabel, BorderLayout.SOUTH);
+
+        add(card, BorderLayout.CENTER);
 
         createBtn.addActionListener(e -> onCreateRoom());
         joinBtn.addActionListener(e -> onJoinRoom());
@@ -141,7 +154,7 @@ public class LobbyPanel extends BasePanel {
     }
 
     private void showError(String text) {
-        statusLabel.setForeground(Color.RED);
+        statusLabel.setForeground(Theme.ERROR);
         statusLabel.setText(text);
     }
 

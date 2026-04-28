@@ -18,11 +18,26 @@ public class ScorePanel extends BasePanel {
         this.appState = appState;
         setLayout(new BorderLayout(8,8));
         rankingArea.setEditable(false);
-        add(new JScrollPane(rankingArea), BorderLayout.CENTER);
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        Theme.styleTextArea(rankingArea);
+        JScrollPane rankingPane = new JScrollPane(rankingArea);
+        Theme.styleScrollPane(rankingPane);
+
+        JPanel card = new JPanel(new BorderLayout(8,8));
+        Theme.stylePanel(card);
+        JLabel title = new JLabel("Final Ranking");
+        Theme.styleTitle(title);
+        card.add(title, BorderLayout.NORTH);
+        card.add(rankingPane, BorderLayout.CENTER);
+
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        actions.setOpaque(false);
+        Theme.styleSecondaryButton(backToLobbyButton);
+        Theme.styleSecondaryButton(logoutButton);
         actions.add(backToLobbyButton);
         actions.add(logoutButton);
-        add(actions, BorderLayout.SOUTH);
+        card.add(actions, BorderLayout.SOUTH);
+
+        add(card, BorderLayout.CENTER);
 
         logoutButton.addActionListener(e -> onLogout());
         backToLobbyButton.addActionListener(e -> onBackToLobby());

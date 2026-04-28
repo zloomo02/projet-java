@@ -16,23 +16,52 @@ public class LoginPanel extends BasePanel {
 
     public LoginPanel(AppState appState) {
         this.appState = appState;
+        JLabel titleLabel = new JLabel("Quiz Multijoueur");
+        Theme.styleTitle(titleLabel);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(8,8,8,8);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1.0;
 
-        c.gridx = 0; c.gridy = 0; add(new JLabel("Username:"), c);
-        c.gridx = 1; add(usernameField, c);
-        c.gridx = 0; c.gridy = 1; add(new JLabel("Password:"), c);
-        c.gridx = 1; add(passwordField, c);
+        JPanel card = new JPanel(new GridBagLayout());
+        Theme.stylePanel(card);
+        GridBagConstraints inner = new GridBagConstraints();
+        inner.insets = new Insets(8,8,8,8);
+        inner.fill = GridBagConstraints.HORIZONTAL;
+        inner.weightx = 1.0;
 
-        JPanel buttons = new JPanel();
+        inner.gridx = 0; inner.gridy = 0; inner.gridwidth = 2; card.add(titleLabel, inner);
+        inner.gridwidth = 1;
+        inner.gridy++;
+        JLabel userLabel = new JLabel("Username");
+        Theme.styleLabel(userLabel);
+        card.add(userLabel, inner);
+        inner.gridx = 1; card.add(usernameField, inner);
+        inner.gridx = 0; inner.gridy++;
+        JLabel passLabel = new JLabel("Password");
+        Theme.styleLabel(passLabel);
+        card.add(passLabel, inner);
+        inner.gridx = 1; card.add(passwordField, inner);
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        buttons.setOpaque(false);
         JButton loginBtn = new JButton("Login");
         JButton registerBtn = new JButton("Register");
+        Theme.stylePrimaryButton(loginBtn);
+        Theme.styleSecondaryButton(registerBtn);
         buttons.add(loginBtn);
         buttons.add(registerBtn);
 
-        c.gridx = 0; c.gridy = 2; c.gridwidth = 2; add(buttons, c);
-        c.gridy = 3; add(statusLabel, c);
+        inner.gridx = 0; inner.gridy++; inner.gridwidth = 2; card.add(buttons, inner);
+        inner.gridy++;
+        Theme.styleStatusLabel(statusLabel);
+        card.add(statusLabel, inner);
+
+        Theme.styleField(usernameField);
+        Theme.stylePasswordField(passwordField);
+
+        c.gridx = 0; c.gridy = 0; add(card, c);
 
         loginBtn.addActionListener(this::onLogin);
         registerBtn.addActionListener(this::onRegister);
@@ -116,7 +145,7 @@ public class LoginPanel extends BasePanel {
     }
 
     private void showError(String text) {
-        statusLabel.setForeground(Color.RED);
+        statusLabel.setForeground(Theme.ERROR);
         statusLabel.setText(text);
     }
 }

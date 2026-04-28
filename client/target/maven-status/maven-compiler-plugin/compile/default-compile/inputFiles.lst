@@ -4,9 +4,11 @@
 /home/zloom/Projects/projet-java/client/src/main/java/client/ServerConnection.java
 /home/zloom/Projects/projet-java/client/src/main/java/client/ClientListener.java
 /home/zloom/Projects/projet-java/client/src/main/java/ui/ScorePanel.java
+/home/zloom/Projects/projet-java/client/src/main/java/ui/GradientPanel.java
 /home/zloom/Projects/projet-java/client/src/main/java/protocol/Message.java
 /home/zloom/Projects/projet-java/client/src/main/java/ui/GamePanel.java
 /home/zloom/Projects/projet-java/client/src/main/java/model/Answer.java
+/home/zloom/Projects/projet-java/client/src/main/java/ui/Theme.java
 /home/zloom/Projects/projet-java/client/src/main/java/model/Player.java
 /home/zloom/Projects/projet-java/client/src/main/java/client/ProtocolTestClient.java
 /home/zloom/Projects/projet-java/client/src/main/java/model/Question.java

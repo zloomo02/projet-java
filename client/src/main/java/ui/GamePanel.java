@@ -18,13 +18,16 @@ public class GamePanel extends BasePanel {
         this.appState = appState;
         setLayout(new BorderLayout(8,8));
 
-        JPanel qPanel = new JPanel(new BorderLayout());
-        questionLabel.setFont(questionLabel.getFont().deriveFont(16f));
+        JPanel qPanel = new JPanel(new BorderLayout(8,8));
+        Theme.stylePanel(qPanel);
+        Theme.styleTitle(questionLabel);
         qPanel.add(questionLabel, BorderLayout.NORTH);
 
         JPanel options = new JPanel(new GridLayout(2,2,8,8));
+        options.setOpaque(false);
         for (int i = 0; i < 4; i++) {
             optionButtons[i] = new JButton("Option " + (char)('A'+i));
+            Theme.stylePrimaryButton(optionButtons[i]);
             int idx = i;
             optionButtons[i].addActionListener(e -> onAnswer((char)('A'+idx) + ""));
             options.add(optionButtons[i]);
@@ -34,7 +37,13 @@ public class GamePanel extends BasePanel {
         add(qPanel, BorderLayout.CENTER);
 
         scoresArea.setEditable(false);
-        add(new JScrollPane(scoresArea), BorderLayout.EAST);
+        Theme.styleTextArea(scoresArea);
+        JScrollPane scoresPane = new JScrollPane(scoresArea);
+        Theme.styleScrollPane(scoresPane);
+        JPanel scoresCard = new JPanel(new BorderLayout());
+        Theme.stylePanel(scoresCard);
+        scoresCard.add(scoresPane, BorderLayout.CENTER);
+        add(scoresCard, BorderLayout.EAST);
     }
 
     @Override
