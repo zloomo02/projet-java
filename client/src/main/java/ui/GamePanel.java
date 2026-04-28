@@ -78,6 +78,7 @@ public class GamePanel extends BasePanel {
                     }
                     scoresArea.setText(sb.toString());
                 }
+                case "ROOM_LIST" -> LobbyPanel.setPendingRoomListPayload(message.getDataAsJsonObject());
                 case "GAME_OVER" -> {
                     ScorePanel.setPendingGameOverPayload(message.getDataAsJsonObject());
                     SwingNavigator.getInstance().show("score");

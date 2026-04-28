@@ -11,6 +11,7 @@ public class ScorePanel extends BasePanel {
     private final AppState appState;
     private final JTextArea rankingArea = new JTextArea();
     private final JButton logoutButton = new JButton("Logout");
+    private final JButton backToLobbyButton = new JButton("Back to Lobby");
     private static JsonObject pendingGameOverPayload;
 
     public ScorePanel(AppState appState) {
@@ -19,10 +20,12 @@ public class ScorePanel extends BasePanel {
         rankingArea.setEditable(false);
         add(new JScrollPane(rankingArea), BorderLayout.CENTER);
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        actions.add(backToLobbyButton);
         actions.add(logoutButton);
         add(actions, BorderLayout.SOUTH);
 
         logoutButton.addActionListener(e -> onLogout());
+        backToLobbyButton.addActionListener(e -> onBackToLobby());
     }
 
     @Override
@@ -38,8 +41,10 @@ public class ScorePanel extends BasePanel {
 
     private void handleServerMessage(Message message) {
         SwingUtilities.invokeLater(() -> {
-            if ("GAME_OVER".equals(message.getType())) {
-                renderRanking(message.getDataAsJsonObject());
+            switch (message.getType()) {
+                case "GAME_OVER" -> renderRanking(message.getDataAsJsonObject());
+                case "ROOM_LIST" -> LobbyPanel.setPendingRoomListPayload(message.getDataAsJsonObject());
+                default -> {}
             }
         });
     }
@@ -72,5 +77,10 @@ public class ScorePanel extends BasePanel {
         LobbyPanel.setPendingRoomListPayload(null);
         setPendingGameOverPayload(null);
         SwingNavigator.getInstance().show("login");
+    }
+
+    private void onBackToLobby() {
+        setPendingGameOverPayload(null);
+        SwingNavigator.getInstance().show("lobby");
     }
 }
