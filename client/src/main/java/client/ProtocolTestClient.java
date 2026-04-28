@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 public class ProtocolTestClient {
     private static final String HOST = "127.0.0.1";
@@ -20,24 +21,49 @@ public class ProtocolTestClient {
 
         try (Socket socket = new Socket(HOST, PORT);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
+             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+             BufferedReader console = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
 
-            // 1) Test LOGIN en succes.
-            Message loginSuccess = Message.of("LOGIN", credentials("alice", "1234"), "alice");
-            sendAndPrint(writer, reader, loginSuccess, "LOGIN succes");
+            System.out.println("Commands: login | register | quit | help | exit");
+            String currentSender = "client";
 
-            // 2) Test LOGIN en echec.
-            Message loginFail = Message.of("LOGIN", credentials("alice", "bad"), "alice");
-            sendAndPrint(writer, reader, loginFail, "LOGIN echec");
+            while (true) {
+                System.out.print("> ");
+                String line = console.readLine();
+                if (line == null) {
+                    break;
+                }
 
-            // 3) Test REGISTER.
-            Message register = Message.of("REGISTER", credentials("bob", "pass"), "bob");
-            sendAndPrint(writer, reader, register, "REGISTER");
+                String cmd = line.trim().toLowerCase(Locale.ROOT);
+                if (cmd.isBlank()) {
+                    continue;
+                }
 
-            // 4) Fin de session.
-            Message quit = Message.of("QUIT", new JsonObject(), "alice");
-            sendAndPrint(writer, reader, quit, "QUIT");
-
+                switch (cmd) {
+                    case "help" -> System.out.println("Commands: login | register | quit | help | exit");
+                    case "exit" -> {
+                        return;
+                    }
+                    case "login" -> {
+                        String username = prompt(console, "Username");
+                        String password = prompt(console, "Password");
+                        currentSender = username;
+                        Message login = Message.of("LOGIN", credentials(username, password), username);
+                        sendAndPrint(writer, reader, login, "LOGIN");
+                    }
+                    case "register" -> {
+                        String username = prompt(console, "Username");
+                        String password = prompt(console, "Password");
+                        Message register = Message.of("REGISTER", credentials(username, password), username);
+                        sendAndPrint(writer, reader, register, "REGISTER");
+                    }
+                    case "quit" -> {
+                        Message quit = Message.of("QUIT", new JsonObject(), currentSender);
+                        sendAndPrint(writer, reader, quit, "QUIT");
+                    }
+                    default -> System.out.println("Unknown command. Type 'help'.");
+                }
+            }
         } catch (IOException e) {
             System.err.println("[ProtocolTestClient] Erreur reseau: " + e.getMessage());
         }
@@ -61,5 +87,11 @@ public class ProtocolTestClient {
         payload.addProperty("username", username);
         payload.addProperty("password", password);
         return payload;
+    }
+
+    private static String prompt(BufferedReader console, String label) throws IOException {
+        System.out.print(label + ": ");
+        String value = console.readLine();
+        return value == null ? "" : value.trim();
     }
 }
