@@ -15,6 +15,7 @@ public class LobbyPanel extends BasePanel {
     private final DefaultListModel<String> roomsModel = new DefaultListModel<>();
     private final JList<String> roomsList = new JList<>(roomsModel);
     private final JLabel statusLabel = new JLabel();
+    private final JButton readyBtn = new JButton("Ready");
 
     private static JsonObject pendingRoomList;
 
@@ -26,11 +27,10 @@ public class LobbyPanel extends BasePanel {
         top.setOpaque(false);
         JButton createBtn = new JButton("Create Room");
         JButton joinBtn = new JButton("Join Room");
-        JButton readyBtn = new JButton("Ready");
         JButton logoutBtn = new JButton("Logout");
         Theme.stylePrimaryButton(createBtn);
         Theme.styleSecondaryButton(joinBtn);
-        Theme.styleSecondaryButton(readyBtn);
+        Theme.styleReadyButtonIdle(readyBtn);
         Theme.styleSecondaryButton(logoutBtn);
         top.add(createBtn);
         top.add(joinBtn);
@@ -58,6 +58,8 @@ public class LobbyPanel extends BasePanel {
     @Override
     public void onShow() {
         statusLabel.setText("");
+        Theme.styleReadyButtonIdle(readyBtn);
+        readyBtn.setEnabled(true);
         appState.setMessageHandler(this::handleServerMessage);
         if (pendingRoomList != null) {
             updateRoomList(pendingRoomList);
@@ -107,6 +109,10 @@ public class LobbyPanel extends BasePanel {
     private void onReady() {
         try {
             appState.send(Message.of("READY", new JsonObject(), appState.getUsername()));
+            Theme.styleReadyButtonActive(readyBtn);
+            readyBtn.setEnabled(false);
+            readyBtn.revalidate();
+            readyBtn.repaint();
         } catch (IOException e) {
             showError("Failed to send READY: " + e.getMessage());
         }

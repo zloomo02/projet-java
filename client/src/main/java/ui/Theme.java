@@ -59,6 +59,22 @@ public final class Theme {
         button.setBorder(new EmptyBorder(8, 16, 8, 16));
     }
 
+    public static void styleReadyButtonIdle(AbstractButton button) {
+        button.setBackground(new Color(40, 50, 78));
+        button.setForeground(TEXT_PRIMARY);
+        button.setFocusPainted(false);
+        button.setFont(BASE_FONT);
+        button.setBorder(new EmptyBorder(8, 16, 8, 16));
+    }
+
+    public static void styleReadyButtonActive(AbstractButton button) {
+        button.setBackground(ACCENT);
+        button.setForeground(new Color(25, 30, 44));
+        button.setFocusPainted(false);
+        button.setFont(BASE_FONT.deriveFont(Font.BOLD, 16f));
+        button.setBorder(new EmptyBorder(12, 22, 12, 22));
+    }
+
     public static void styleField(JTextField field) {
         field.setBackground(new Color(22, 28, 44));
         field.setForeground(TEXT_PRIMARY);
