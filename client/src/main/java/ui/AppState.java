@@ -55,6 +55,15 @@ public class AppState {
         serverConnection.disconnect();
     }
 
+    /**
+     * Logout utilisateur et nettoyage des infos de session.
+     */
+    public void logout() {
+        disconnect();
+        username = "";
+        playerId = -1;
+    }
+
     public String getUsername() {
         return username;
     }

@@ -26,9 +26,11 @@ public class LobbyPanel extends BasePanel {
         JButton createBtn = new JButton("Create Room");
         JButton joinBtn = new JButton("Join Room");
         JButton readyBtn = new JButton("Ready");
+        JButton logoutBtn = new JButton("Logout");
         top.add(createBtn);
         top.add(joinBtn);
         top.add(readyBtn);
+        top.add(logoutBtn);
 
         add(top, BorderLayout.NORTH);
         add(new JScrollPane(roomsList), BorderLayout.CENTER);
@@ -37,6 +39,7 @@ public class LobbyPanel extends BasePanel {
         createBtn.addActionListener(e -> onCreateRoom());
         joinBtn.addActionListener(e -> onJoinRoom());
         readyBtn.addActionListener(e -> onReady());
+        logoutBtn.addActionListener(e -> onLogout());
     }
 
     @Override
@@ -73,8 +76,14 @@ public class LobbyPanel extends BasePanel {
             showError("Select a room to join.");
             return;
         }
+        // selected is formatted as "<name> (players/max)" - extract the name part
+        String roomName = selected;
+        int idx = selected.indexOf(" (");
+        if (idx > 0) {
+            roomName = selected.substring(0, idx);
+        }
         JsonObject payload = new JsonObject();
-        payload.addProperty("roomName", selected);
+        payload.addProperty("roomName", roomName);
         try {
             appState.send(Message.of("JOIN_ROOM", payload, appState.getUsername()));
         } catch (IOException e) {
@@ -88,6 +97,13 @@ public class LobbyPanel extends BasePanel {
         } catch (IOException e) {
             showError("Failed to send READY: " + e.getMessage());
         }
+    }
+
+    private void onLogout() {
+        appState.logout();
+        setPendingRoomListPayload(null);
+        ScorePanel.setPendingGameOverPayload(null);
+        SwingNavigator.getInstance().show("login");
     }
 
     private void handleServerMessage(Message message) {
@@ -112,13 +128,16 @@ public class LobbyPanel extends BasePanel {
         roomsModel.clear();
         if (payload == null) return;
         JsonArray array = payload.has("rooms") ? payload.getAsJsonArray("rooms") : new JsonArray();
-        List<String> names = new ArrayList<>();
         for (int i = 0; i < array.size(); i++) {
             JsonObject obj = array.get(i).getAsJsonObject();
-            String name = obj.has("roomName") ? obj.get("roomName").getAsString() : "";
-            names.add(name);
+            // server sends 'name', 'players', 'max' in GameManager.buildRoomListPayload()
+            String name = obj.has("name") ? obj.get("name").getAsString()
+                : obj.has("roomName") ? obj.get("roomName").getAsString() : "";
+            int players = obj.has("players") ? obj.get("players").getAsInt() : (obj.has("playerCount") ? obj.get("playerCount").getAsInt() : 0);
+            int max = obj.has("max") ? obj.get("max").getAsInt() : (obj.has("maxPlayers") ? obj.get("maxPlayers").getAsInt() : 0);
+            String display = String.format("%s (%d/%d)", name, players, max);
+            roomsModel.addElement(display);
         }
-        names.forEach(roomsModel::addElement);
     }
 
     private void showError(String text) {

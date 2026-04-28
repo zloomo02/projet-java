@@ -125,6 +125,12 @@ public class ClientHandler implements Runnable {
             return;
         }
 
+        // Prevent the same account from logging in multiple times.
+        if (!gameManager.tryRegisterUsername(player.getUsername(), this)) {
+            sendMessage(Message.of("LOGIN_FAIL", reasonPayload("Utilisateur deja connecte"), "SERVER"));
+            return;
+        }
+
         this.username = player.getUsername();
         this.playerId = player.getId();
 
@@ -274,6 +280,7 @@ public class ClientHandler implements Runnable {
         }
 
         connected = false;
+        gameManager.unregisterUsername(username, this);
         gameManager.removePlayerFromSession(this);
         gameManager.unregisterClient(this);
 

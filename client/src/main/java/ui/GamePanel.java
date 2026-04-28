@@ -78,7 +78,10 @@ public class GamePanel extends BasePanel {
                     }
                     scoresArea.setText(sb.toString());
                 }
-                case "GAME_OVER" -> SwingNavigator.getInstance().show("score");
+                case "GAME_OVER" -> {
+                    ScorePanel.setPendingGameOverPayload(message.getDataAsJsonObject());
+                    SwingNavigator.getInstance().show("score");
+                }
                 default -> {}
             }
         });

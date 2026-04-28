@@ -13,10 +13,12 @@ public class GameManager {
 
     private final Map<String, GameSession> sessions;
     private final Set<ClientHandler> connectedClients;
+    private final Map<String, ClientHandler> activeUsers;
 
     private GameManager() {
         this.sessions = new ConcurrentHashMap<>();
         this.connectedClients = ConcurrentHashMap.newKeySet();
+        this.activeUsers = new ConcurrentHashMap<>();
     }
 
     public static GameManager getInstance() {
@@ -29,6 +31,28 @@ public class GameManager {
 
     public void unregisterClient(ClientHandler clientHandler) {
         connectedClients.remove(clientHandler);
+    }
+
+    /**
+     * Enregistre un username actif pour empecher les connexions multiples.
+     */
+    public boolean tryRegisterUsername(String username, ClientHandler handler) {
+        if (username == null || username.isBlank() || handler == null) {
+            return false;
+        }
+
+        ClientHandler existing = activeUsers.putIfAbsent(username, handler);
+        return existing == null || existing == handler;
+    }
+
+    /**
+     * Retire un username actif si le handler correspond.
+     */
+    public void unregisterUsername(String username, ClientHandler handler) {
+        if (username == null || username.isBlank() || handler == null) {
+            return;
+        }
+        activeUsers.remove(username, handler);
     }
 
     /**
