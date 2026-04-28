@@ -11,9 +11,9 @@
     },
     {
       "type": "java",
-      "name": "Client UI: QuizApplication",
+      "name": "Client UI: SwingQuizApp",
       "request": "launch",
-      "mainClass": "ui.QuizApplication",
+      "mainClass": "ui.SwingQuizApp",
       "projectName": "quiz-client",
       "cwd": "${workspaceFolder}/client"
     },
@@ -32,6 +32,13 @@
       "configurations": [
         "Server: ServerMain",
         "Client Console: ClientMain"
+      ]
+    },
+    {
+      "name": "Run Server + Swing Client",
+      "configurations": [
+        "Server: ServerMain",
+        "Client UI: SwingQuizApp"
       ]
     }
   ]
